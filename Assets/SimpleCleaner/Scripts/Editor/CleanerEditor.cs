@@ -57,6 +57,9 @@ namespace SimpleCleaner.Editor
             string[] allAssets = AssetDatabase.GetAllAssetPaths();
             HashSet<string> referencedAssets = new HashSet<string>();
 
+            // Find assets in "Selected Paths" only, excluding "Exceptional Paths"
+
+            // Find dependencies
             foreach (var scene in EditorBuildSettings.scenes)
             {
                 if (scene.enabled)
@@ -101,7 +104,6 @@ namespace SimpleCleaner.Editor
             Debug.Log($"Deleted {selectedAssets.Count} unused assets.");
             unusedAssets.Clear();
             AssetDatabase.Refresh();
-            assetTreeView?.SetAssets(unusedAssets);
         }
     }
 
