@@ -4,14 +4,14 @@ using UnityEditor;
 
 namespace SimpleCleaner.Core
 {
-    public static class PresetLoader
+    public static class ConfigLoader
     {
         public static List<AssetPathConfig> LoadScriptableObjects()
         {
             List<AssetPathConfig> scriptableObjects = new List<AssetPathConfig>();
 
-            // type : AnimOptionSO
-            string[] guids = AssetDatabase.FindAssets("t:AssetPathConfig", new[] { Constants.PATH_CONFIG });
+			// type : AssetPathConfig
+			string[] guids = AssetDatabase.FindAssets("t:AssetPathConfig", new[] { Constants.PATH_CONFIG });
             scriptableObjects.Clear();
 
             foreach (string guid in guids)
