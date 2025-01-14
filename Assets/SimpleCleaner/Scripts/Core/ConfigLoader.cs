@@ -1,4 +1,3 @@
-using SimpleCleaner.Util;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace SimpleCleaner.Core
             List<AssetPathConfig> scriptableObjects = new List<AssetPathConfig>();
 
 			// type : AssetPathConfig
-			string[] guids = AssetDatabase.FindAssets("t:AssetPathConfig", new[] { Constants.PATH_CONFIG });
+			string[] guids = AssetDatabase.FindAssets("t:AssetPathConfig", new[] { SimpleCleaner.Util.Constants.PATH_CONFIG });
             scriptableObjects.Clear();
 
             foreach (string guid in guids)

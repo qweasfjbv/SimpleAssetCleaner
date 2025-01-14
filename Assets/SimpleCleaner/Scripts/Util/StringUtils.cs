@@ -1,32 +1,34 @@
-using SimpleCleaner.Util;
 
-public static class StringUtils
+namespace SimpleCleaner.Util
 {
-	public static string PreprocessPath(string absolutePath)
+	public static class StringUtils
 	{
-		// start with "Assets/"
-		string relativePath = "";
-		string[] folders = absolutePath.Split('/');
-		bool isInAssets = false;
-
-		foreach (var folder in folders)
+		public static string PreprocessPath(string absolutePath)
 		{
-			if (folder == "Assets" || folder == "assets")
+			// start with "Assets/"
+			string relativePath = "";
+			string[] folders = absolutePath.Split('/');
+			bool isInAssets = false;
+
+			foreach (var folder in folders)
 			{
-				isInAssets = true;
+				if (folder == "Assets" || folder == "assets")
+				{
+					isInAssets = true;
+				}
+
+				if (isInAssets)
+				{
+					relativePath += folder + "/";
+				}
 			}
 
-			if (isInAssets)
+			if (relativePath == "")
 			{
-				relativePath += folder + "/";
+				return PreprocessPath(SimpleCleaner.Util.Constants.PATH_BASIC);
 			}
-		}
 
-		if (relativePath == "")
-		{
-			return PreprocessPath(Constants.PATH_BASIC);
+			return relativePath;
 		}
-
-		return relativePath;
 	}
 }

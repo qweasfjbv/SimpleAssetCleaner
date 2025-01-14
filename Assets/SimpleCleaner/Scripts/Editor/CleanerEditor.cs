@@ -2,9 +2,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
-using SimpleCleaner.Core;
-using SimpleCleaner.Util;
-using JetBrains.Annotations;
 using System.IO;
 
 namespace SimpleCleaner.Editor
@@ -34,10 +31,10 @@ namespace SimpleCleaner.Editor
         {
 
 			EditorGUILayout.Space(20);
-			EditorGUILayout.LabelField("Simple Cleaner", EditorUtil.GetH1LabelStyle());
+			EditorGUILayout.LabelField("Simple Cleaner", SimpleCleaner.Util.EditorUtil.GetH1LabelStyle());
 
 			EditorGUILayout.Space(20);
-			EditorUtil.GuiLine(3);
+			SimpleCleaner.Util.EditorUtil.GuiLine(3);
 			EditorGUILayout.Space(20);
 
 
@@ -70,8 +67,8 @@ namespace SimpleCleaner.Editor
             string[] allAssets = AssetDatabase.GetAllAssetPaths();
             HashSet<string> referencedAssets = new HashSet<string>();
 
-            // Find assets in "Selected Paths" only, excluding "Exceptional Paths"
-            PathFilter.FilterPaths(ref allAssets);
+			// Find assets in "Selected Paths" only, excluding "Exceptional Paths"
+			SimpleCleaner.Core.PathFilter.FilterPaths(ref allAssets);
 
             // Find dependencies
             foreach (var scene in EditorBuildSettings.scenes)

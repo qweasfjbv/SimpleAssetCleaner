@@ -1,12 +1,10 @@
-using UnityEngine;
-using UnityEditor;
-using SimpleCleaner.Core;
 using System.Collections.Generic;
-using SimpleCleaner.Util;
+using UnityEditor;
+using UnityEngine;
 
 namespace SimpleCleaner.Editor
 {
-    public class PathConfigEditor : EditorWindow
+	public class PathConfigEditor : EditorWindow
     {
 		private List<string> includePaths = new List<string>();
 		private List<string> excludePaths = new List<string>();
@@ -28,7 +26,7 @@ namespace SimpleCleaner.Editor
 
 		private void OnEnable()
 		{
-			assetConfig = ConfigLoader.LoadScriptableObjects();
+			assetConfig = SimpleCleaner.Core.ConfigLoader.LoadScriptableObjects();
 
 			includePaths.Clear();
 			excludePaths.Clear();
@@ -52,10 +50,10 @@ namespace SimpleCleaner.Editor
 			labelStyle.alignment = TextAnchor.MiddleCenter;
 
 			EditorGUILayout.Space(20);
-			EditorGUILayout.LabelField("Cleaner Path Config", EditorUtil.GetH1LabelStyle());
+			EditorGUILayout.LabelField("Cleaner Path Config", SimpleCleaner.Util.EditorUtil.GetH1LabelStyle());
 
 			EditorGUILayout.Space(20);
-			EditorUtil.GuiLine(3);
+			SimpleCleaner.Util.EditorUtil.GuiLine(3);
 			EditorGUILayout.Space(20);
 
 			// Include Paths Section
@@ -84,10 +82,10 @@ namespace SimpleCleaner.Editor
 
 			if (GUILayout.Button("Add Include path"))
 			{
-				tmpString = EditorUtility.OpenFolderPanel("Include path", Constants.PATH_BASIC, "");
+				tmpString = EditorUtility.OpenFolderPanel("Include path", SimpleCleaner.Util.Constants.PATH_BASIC, "");
 				if (tmpString != "")
 				{
-					tmpString = StringUtils.PreprocessPath(tmpString);
+					tmpString = SimpleCleaner.Util.StringUtils.PreprocessPath(tmpString);
 					if (!includePaths.Contains(tmpString))
 						includePaths.Add(tmpString);
 
@@ -99,7 +97,7 @@ namespace SimpleCleaner.Editor
 			EditorGUILayout.EndHorizontal();
 
 			EditorGUILayout.Space(20);
-			EditorUtil.GuiLine(3);
+			SimpleCleaner.Util.EditorUtil.GuiLine(3);
 			EditorGUILayout.Space(20);
 
 			labelStyle.alignment = TextAnchor.MiddleCenter;
@@ -130,8 +128,8 @@ namespace SimpleCleaner.Editor
 			if (GUILayout.Button("Add Exclude path"))
 			{
 				tmpString = EditorUtility.OpenFolderPanel("Exclude path", "", "");
-				if (tmpString == "") tmpString = Constants.PATH_BASIC;
-				tmpString = StringUtils.PreprocessPath(tmpString);
+				if (tmpString == "") tmpString = SimpleCleaner.Util.Constants.PATH_BASIC;
+				tmpString = SimpleCleaner.Util.StringUtils.PreprocessPath(tmpString);
 
 				if (!excludePaths.Contains(tmpString))
 					excludePaths.Add(tmpString);
