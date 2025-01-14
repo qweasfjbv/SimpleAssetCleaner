@@ -1,12 +1,16 @@
 using SimpleCleaner.Util;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 namespace SimpleCleaner.Core
 {
     public static class ConfigLoader
     {
-        public static List<AssetPathConfig> LoadScriptableObjects()
+        /// <summary>
+        /// Return ONLY 1 SO
+        /// </summary>
+        public static AssetPathConfig LoadScriptableObjects()
         {
             List<AssetPathConfig> scriptableObjects = new List<AssetPathConfig>();
 
@@ -24,8 +28,12 @@ namespace SimpleCleaner.Core
                 }
             }
 
-            return scriptableObjects;
+            if (scriptableObjects.Count <= 0)
+            {
+                Debug.LogError("There is no configure SO!");
+                return null;
+            }
+            return scriptableObjects[0];
         }
-
     }
 }

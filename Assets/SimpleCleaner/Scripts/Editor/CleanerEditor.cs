@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
+using SimpleCleaner.Core;
+using SimpleCleaner.Util;
+using JetBrains.Annotations;
+using System.IO;
 
 namespace SimpleCleaner.Editor
 {
@@ -11,7 +15,7 @@ namespace SimpleCleaner.Editor
         private AssetTreeView assetTreeView;
         private List<string> unusedAssets = new List<string>();
 
-        [MenuItem("Tools/Simple Asset Cleaner")]
+		[MenuItem("Tools/Simple Asset Cleaner/Cleaner Editor")]
         private static void OpenWindow()
         {
             var window = GetWindow<CleanerEditor>("Simple Asset Cleaner");
@@ -28,7 +32,16 @@ namespace SimpleCleaner.Editor
 
         private void OnGUI()
         {
-            if (GUILayout.Button("Find Unused Assets", GUILayout.Height(30)))
+
+			EditorGUILayout.Space(20);
+			EditorGUILayout.LabelField("Simple Cleaner", EditorUtil.GetH1LabelStyle());
+
+			EditorGUILayout.Space(20);
+			EditorUtil.GuiLine(3);
+			EditorGUILayout.Space(20);
+
+
+			if (GUILayout.Button("Find Unused Assets", GUILayout.Height(30)))
             {
                 FindUnusedAssets();
             }
@@ -58,6 +71,7 @@ namespace SimpleCleaner.Editor
             HashSet<string> referencedAssets = new HashSet<string>();
 
             // Find assets in "Selected Paths" only, excluding "Exceptional Paths"
+            PathFilter.FilterPaths(ref allAssets);
 
             // Find dependencies
             foreach (var scene in EditorBuildSettings.scenes)
@@ -72,6 +86,7 @@ namespace SimpleCleaner.Editor
                 }
             }
 
+            long fileSize = 0;
             foreach (var asset in allAssets)
             {
                 if (!asset.StartsWith("Assets/"))       continue;
@@ -80,11 +95,14 @@ namespace SimpleCleaner.Editor
                 if (!referencedAssets.Contains(asset))
                 {
                     unusedAssets.Add(asset);
+                    FileInfo info = new FileInfo(asset);
+					fileSize += info.Length;
                 }
             }
 
-            Debug.Log($"Found {unusedAssets.Count} unused assets.");
-            assetTreeView?.SetAssets(unusedAssets);
+			Debug.Log($"Found {unusedAssets.Count} unused assets.");
+			Debug.Log($"You can save {fileSize/1e6:f2}MB!");
+			assetTreeView?.SetAssets(unusedAssets);
         }
 
         private void DeleteSelectedAssets()

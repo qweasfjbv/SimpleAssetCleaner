@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: BasicConfigPaths
   m_EditorClassIdentifier: 
   includePaths:
-  - Assets/_Demo
-  excludePaths: []
+  - Assets/SimpleCleaner/_Demo/Resources/
+  excludePaths:
+  - Assets/SimpleCleaner/_Demo/Resources/_ExcludeFolder/

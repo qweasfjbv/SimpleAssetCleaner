@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using SimpleCleaner.Core;
 using System.Collections.Generic;
+using SimpleCleaner.Util;
 
 namespace SimpleCleaner.Editor
 {
@@ -10,108 +11,150 @@ namespace SimpleCleaner.Editor
 		private List<string> includePaths = new List<string>();
 		private List<string> excludePaths = new List<string>();
 		
-		private List<AssetPathConfig> assetConfigs;
+		private AssetPathConfig assetConfig;
 
 		private Vector2 includeScrollPos;
 		private Vector2 excludeScrollPos;
 
-		[MenuItem("Window/SimpleCleaner/Path Config Setter")]
+		private GUIStyle borderStyle;
+
+		[MenuItem("Tools/Simple Asset Cleaner/Path Config Editor")]
 		public static void ShowWindow()
 		{
 			var window = GetWindow<PathConfigEditor>("Path Config Setter");
-			window.maxSize = new Vector2(600, 600);
-			window.minSize = window.maxSize;
+			window.maxSize = new Vector2(1200, 600);
+			window.minSize = new Vector2(600, 600);
 		}
 
 		private void OnEnable()
 		{
-			assetConfigs = ConfigLoader.LoadScriptableObjects();
+			assetConfig = ConfigLoader.LoadScriptableObjects();
 
-			foreach (var assetConfig in assetConfigs)
-			{
-				includePaths.AddRange(assetConfig.includePaths);
-				excludePaths.AddRange(assetConfig.excludePaths);
-			}
+			includePaths.Clear();
+			excludePaths.Clear();
+
+			includePaths.AddRange(assetConfig.includePaths);
+			excludePaths.AddRange(assetConfig.excludePaths);
 		}
 
+		private string tmpString;
 		private void OnGUI()
 		{
-			EditorGUILayout.LabelField("Environment Variable Editor", EditorStyles.boldLabel);
-			EditorGUILayout.Space();
 
+			borderStyle = new GUIStyle(GUI.skin.box)
+			{
+				margin = new RectOffset(20, 20, 0, 20), // 외부 여백
+				padding = new RectOffset(5, 5, 5, 5),   // 내부 여백
+			};
+
+
+			GUIStyle labelStyle = new GUIStyle(EditorStyles.boldLabel);
+			labelStyle.alignment = TextAnchor.MiddleCenter;
+
+			EditorGUILayout.Space(20);
+			EditorGUILayout.LabelField("Cleaner Path Config", EditorUtil.GetH1LabelStyle());
+
+			EditorGUILayout.Space(20);
+			EditorUtil.GuiLine(3);
+			EditorGUILayout.Space(20);
 
 			// Include Paths Section
-			EditorGUILayout.BeginHorizontal(GUILayout.Height(position.height / 2 - 10));
-			EditorGUILayout.LabelField("Include Paths", EditorStyles.boldLabel);
+			EditorGUILayout.BeginHorizontal();
 
-			includeScrollPos = EditorGUILayout.BeginScrollView(includeScrollPos, GUILayout.Height(300));
+			EditorGUIUtility.labelWidth = 15f;
+			EditorGUILayout.LabelField("Include Paths", labelStyle);
+
+			EditorGUILayout.BeginVertical(borderStyle);
+			labelStyle.alignment = TextAnchor.MiddleLeft;
+			includeScrollPos = EditorGUILayout.BeginScrollView(includeScrollPos, GUILayout.Height(200));
 			for (int i = 0; i < includePaths.Count; i++)
 			{
 				EditorGUILayout.BeginHorizontal();
-				includePaths[i] = EditorGUILayout.TextField(includePaths[i]);
-
+				EditorGUILayout.LabelField(includePaths[i], labelStyle);
 				if (GUILayout.Button("X", GUILayout.Width(20)))
 				{
 					includePaths.RemoveAt(i);
 					i--; // Adjust index after removal
+					SaveSettingPaths();
 				}
 				EditorGUILayout.EndHorizontal();
 			}
 			EditorGUILayout.EndScrollView();
+			EditorGUILayout.EndVertical();
 
-			if (GUILayout.Button("Add Include Path"))
+			if (GUILayout.Button("Add Include path"))
 			{
-				includePaths.Add(string.Empty);
+				tmpString = EditorUtility.OpenFolderPanel("Include path", Constants.PATH_BASIC, "");
+				if (tmpString != "")
+				{
+					tmpString = StringUtils.PreprocessPath(tmpString);
+					if (!includePaths.Contains(tmpString))
+						includePaths.Add(tmpString);
+
+					SaveSettingPaths();
+				}
+
 			}
+
 			EditorGUILayout.EndHorizontal();
 
-			// Exclude Paths Section
-			EditorGUILayout.BeginHorizontal(GUILayout.Height(position.height/ 2 - 10));
-			EditorGUILayout.LabelField("Exclude Paths", EditorStyles.boldLabel);
+			EditorGUILayout.Space(20);
+			EditorUtil.GuiLine(3);
+			EditorGUILayout.Space(20);
 
-			excludeScrollPos = EditorGUILayout.BeginScrollView(excludeScrollPos, GUILayout.Height(300));
+			labelStyle.alignment = TextAnchor.MiddleCenter;
+			// Exclude Paths Section
+			EditorGUILayout.BeginHorizontal();
+
+			EditorGUIUtility.labelWidth = 15f;
+			EditorGUILayout.LabelField("Exclude Paths", labelStyle);
+
+			EditorGUILayout.BeginVertical(borderStyle);
+			labelStyle.alignment = TextAnchor.MiddleLeft;
+			excludeScrollPos = EditorGUILayout.BeginScrollView(excludeScrollPos, GUILayout.Height(200));
 			for (int i = 0; i < excludePaths.Count; i++)
 			{
 				EditorGUILayout.BeginHorizontal();
-				excludePaths[i] = EditorGUILayout.TextField(excludePaths[i]);
-
+				EditorGUILayout.LabelField(excludePaths[i], labelStyle);
 				if (GUILayout.Button("X", GUILayout.Width(20)))
 				{
 					excludePaths.RemoveAt(i);
-					i--; // Adjust index after removal
+					i--;
+					SaveSettingPaths();
 				}
 				EditorGUILayout.EndHorizontal();
 			}
 			EditorGUILayout.EndScrollView();
+			EditorGUILayout.EndVertical();
 
-			if (GUILayout.Button("Add Exclude Path"))
+			if (GUILayout.Button("Add Exclude path"))
 			{
-				excludePaths.Add(string.Empty);
+				tmpString = EditorUtility.OpenFolderPanel("Exclude path", "", "");
+				if (tmpString == "") tmpString = Constants.PATH_BASIC;
+				tmpString = StringUtils.PreprocessPath(tmpString);
+
+				if (!excludePaths.Contains(tmpString))
+					excludePaths.Add(tmpString);
+
+				SaveSettingPaths();
 			}
+
 			EditorGUILayout.EndHorizontal();
-
-
-			EditorGUILayout.Space();
-
-			if (GUILayout.Button("Save"))
-			{
-				SaveEnvironmentVariables();
-			}
 		}
 
-		private void SaveEnvironmentVariables()
+		private void SaveSettingPaths()
 		{
-			Debug.Log("Include Paths:");
-			foreach (var path in includePaths)
+			if (assetConfig == null)
 			{
-				Debug.Log(path);
+				Debug.LogError("There is NO Config SO!");
+				return;
 			}
 
-			Debug.Log("Exclude Paths:");
-			foreach (var path in excludePaths)
-			{
-				Debug.Log(path);
-			}
+			assetConfig.includePaths = includePaths;
+			assetConfig.excludePaths = excludePaths;
+
+			EditorUtility.SetDirty(assetConfig);
+			AssetDatabase.SaveAssets();
 		}
 	}
 }
