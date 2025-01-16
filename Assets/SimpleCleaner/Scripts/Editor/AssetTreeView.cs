@@ -60,17 +60,17 @@ namespace SimpleCleaner.Editor
 
         protected override void RowGUI(RowGUIArgs args)
         {
-            Rect toggleButtonRect = new Rect(args.rowRect.x, args.rowRect.y, GetContentIndent(args.item), args.rowRect.height);
+            Rect toggleRect = new Rect(args.rowRect.x, args.rowRect.y, GetContentIndent(args.item), args.rowRect.height);
             base.RowGUI(new RowGUIArgs
             {
-                rowRect = toggleButtonRect,
+                rowRect = args.rowRect,
                 item = args.item,
                 label = "",
                 selected = args.selected,
                 focused = args.focused
             });
 
-            Rect checkBoxRect = new Rect(toggleButtonRect.xMax + 2, args.rowRect.y, 20, args.rowRect.height);
+            Rect checkBoxRect = new Rect(toggleRect.xMax + 2, args.rowRect.y, 20, args.rowRect.height);
             bool isToggled = toggledItemIds.Contains(args.item.id);
             bool newToggled = EditorGUI.Toggle(checkBoxRect, isToggled);
 
@@ -92,7 +92,7 @@ namespace SimpleCleaner.Editor
             EditorGUI.LabelField(nameRect, args.item.displayName);
         }
 
-        private void CheckAllItems(TreeViewItem item, bool isChecked)
+		private void CheckAllItems(TreeViewItem item, bool isChecked)
         {
             if (isChecked)
                 toggledItemIds.Add(item.id);

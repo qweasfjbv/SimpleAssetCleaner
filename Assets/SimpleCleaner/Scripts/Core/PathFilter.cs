@@ -7,11 +7,13 @@ namespace SimpleCleaner.Core
 	{
 		/// <summary>
 		/// Get paths and
-		///  filter according to Include/Exclude paths
+		///  filter according to Include/Exclude paths and extentions.
 		/// </summary>
 		public static void FilterPaths(ref string[] paths)
 		{
-			AssetPathConfig pathConfig = ConfigLoader.LoadScriptableObjects();
+			/** Filter Paths  **/
+
+			AssetPathConfig pathConfig = ConfigLoader.LoadAssetPathSO();
 
 			// Filter - Include paths
 			List<string> filteredPaths = paths
@@ -21,9 +23,13 @@ namespace SimpleCleaner.Core
 			// Filter - Exclude paths
 			filteredPaths.RemoveAll(path => pathConfig.excludePaths.Any(exclude => path.StartsWith(exclude, System.StringComparison.OrdinalIgnoreCase)));
 
+			/** Filter Extentions **/
+
+			// Filter - Exclude Extentions
+			filteredPaths.RemoveAll(path => pathConfig.excludeExtention.Any(exclude => path.EndsWith(exclude, System.StringComparison.OrdinalIgnoreCase)));
+
 			paths = filteredPaths.ToArray();
 			return;
 		}
-
 	}
 }

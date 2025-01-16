@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   includePaths:
   - Assets/SimpleCleaner/_Demo/Resources/
-  - Assets/Settings/
   excludePaths:
   - Assets/SimpleCleaner/_Demo/Resources/_ExcludeFolder/
+  excludeExtention:
+  - .cs

@@ -1,0 +1,66 @@
+	Documentation.
+
+	qweasfjbv.
+
+	Thank you for purchasing our product.
+	We hope our tools make your development process more convenient.
+
+	If you have a better idea/optimization method or find any bugs, please contact me via Email.
+	My Email address is : yeoinho75@gmail.com
+
+
+	This asset includes:
+		
+		- Editor scripts for better UX.
+		- Core scripts to perform functions.
+		- Demo Scene to test editor funcs.
+
+
+	What is this tool for :
+
+        - Unity tool for clean unused assets by tracing dependencies.
+        - You can check how much storage is used by unused files.
+
+
+	How To Use:
+		
+        - Set path configs with PathConfigEditor (Tools -> SimpleAssetCleaner -> PathConfigEditor)
+        - Find unused files with CleanerEditor (Tools -> SimpleAssetCleaner -> CleanerEditor)
+        - Click "Find Unused Assets" button
+            - You will then see unused assets with tree structure.
+            - You can check the size of unused assets in console log.
+        - Click "Delete Selected Assets" button to delete all selected files.
+
+        [*Caution!*]
+        - It traces dependencies from Scenes in Build Settings. (Build Profiles in Unity 6)
+        - So If there are assets with dependencies from other locations, (ex. project settigns ...)
+             you should add them to the Exclude Paths or manually uncheck them.
+        - Assets dynamically loaded in the script cannot be tracked either.
+        
+
+	How To Modify:
+
+		- If you want to modify the editor layout then:
+			- Find scripts in SimpleCleaner/Scripts/Editor/
+                - CleanerEditor.cs      : script to draw CleanerEditor.
+                - AssetTreeView.cs      : script to display assets in the editor as a tree view.
+                - PathConfigEditor.cs   : script to draw PathConfigEditor.
+
+			- Find `OnGUI()` function
+			- All the code for drawing the editor is there.
+
+		- If you want to modify/optimize making progress then:
+			- Find scripts in SimpleCleaner/Scripts/Core/
+				- ConfigLoader.cs 	    : script to load scriptable objects.
+				- PathFilter.cs 		: script to filter paths using configs.
+
+		- For any other issues:
+			- You can leave a comment with any areas that need improvement or features you would like to see.
+			- You can email me directly at: ( yeoinho75@gmail.com )
+            - You can attribute to github repository at: ( https://github.com/qweasfjbv/SimpleAssetCleaner )
+
+
+	External Asset Used
+
+		- FBXs in _Demo Scene	:	[Low Poly Game Dev Bundle] from ELDAMAR STUDIO
+		- [https://eldamar-studio.com/product/low-poly-game-dev-bundle/]

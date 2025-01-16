@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SimpleCleaner.Editor
 {
-	public class PathConfigEditor : EditorWindow
+	public class CleanerConfigEditor : EditorWindow
     {
 		private List<string> includePaths = new List<string>();
 		private List<string> excludePaths = new List<string>();
@@ -19,14 +19,14 @@ namespace SimpleCleaner.Editor
 		[MenuItem("Tools/Simple Asset Cleaner/Path Config Editor")]
 		public static void ShowWindow()
 		{
-			var window = GetWindow<PathConfigEditor>("Path Config Setter");
+			var window = GetWindow<CleanerConfigEditor>("Path Config Setter");
 			window.maxSize = new Vector2(1200, 600);
 			window.minSize = new Vector2(600, 600);
 		}
 
 		private void OnEnable()
 		{
-			assetConfig = SimpleCleaner.Core.ConfigLoader.LoadScriptableObjects();
+			assetConfig = SimpleCleaner.Core.ConfigLoader.LoadAssetPathSO();
 
 			includePaths.Clear();
 			excludePaths.Clear();
@@ -50,7 +50,7 @@ namespace SimpleCleaner.Editor
 			labelStyle.alignment = TextAnchor.MiddleCenter;
 
 			EditorGUILayout.Space(20);
-			EditorGUILayout.LabelField("Cleaner Path Config", SimpleCleaner.Util.EditorUtil.GetH1LabelStyle());
+			EditorGUILayout.LabelField("Cleaner Config", SimpleCleaner.Util.EditorUtil.GetH1LabelStyle());
 
 			EditorGUILayout.Space(20);
 			SimpleCleaner.Util.EditorUtil.GuiLine(3);

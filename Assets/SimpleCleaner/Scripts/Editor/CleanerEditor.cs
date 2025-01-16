@@ -97,6 +97,10 @@ namespace SimpleCleaner.Editor
                 }
             }
 
+			for (int i = 0; i < unusedAssets.Count; i++)
+			{
+				Debug.Log(unusedAssets[i]);
+			}
 			Debug.Log($"Found {unusedAssets.Count} unused assets.");
 			Debug.Log($"You can save {fileSize/1e6:f2}MB!");
 			assetTreeView?.SetAssets(unusedAssets);

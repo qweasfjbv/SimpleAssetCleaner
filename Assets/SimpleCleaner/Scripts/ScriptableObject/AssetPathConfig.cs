@@ -8,5 +8,6 @@ namespace SimpleCleaner
     {
         public List<string> includePaths;
         public List<string> excludePaths;
+        public List<string> excludeExtention;
     }
 }

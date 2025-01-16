@@ -9,7 +9,7 @@ namespace SimpleCleaner.Core
         /// <summary>
         /// Return ONLY 1 SO
         /// </summary>
-        public static AssetPathConfig LoadScriptableObjects()
+        public static AssetPathConfig LoadAssetPathSO()
         {
             List<AssetPathConfig> scriptableObjects = new List<AssetPathConfig>();
 
